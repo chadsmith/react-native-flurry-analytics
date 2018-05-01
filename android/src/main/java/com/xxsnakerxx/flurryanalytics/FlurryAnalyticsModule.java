@@ -1,5 +1,6 @@
 package com.xxsnakerxx.flurryanalytics;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -7,14 +8,13 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import com.flurry.android.Constants;
 import com.flurry.android.FlurryAgent;
 import com.flurry.android.FlurryAgent.Builder;
 import com.flurry.android.FlurryAgentListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FlurryAnalyticsModule extends ReactContextBaseJavaModule {
 
@@ -35,12 +35,14 @@ public class FlurryAnalyticsModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void startSession(String apiKey) {
-    mFlurryAgentBuilder
-            .withListener(new FlurryAgentListener() {
-              @Override
-              public void onSessionStarted() {}
-            })
-            .build(getCurrentActivity(), apiKey);
+    Context context = getReactApplicationContext();
+    if(context != null)
+      mFlurryAgentBuilder
+              .withListener(new FlurryAgentListener() {
+                @Override
+                public void onSessionStarted() {}
+              })
+              .build(context, apiKey);
   }
 
   @ReactMethod
